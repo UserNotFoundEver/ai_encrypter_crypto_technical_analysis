@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Encrypter & Crypto Analysis</title>
+</head>
+<body>
+    <h1>AI Encrypter & Crypto Analysis</h1>
+    
+    <h2>Encryption</h2>
+    <form id="encryptForm">
+        <input type="text" id="encryptInput" placeholder="Enter text to encrypt">
+        <button type="submit">Encrypt</button>
+    </form>
+    <p id="encryptResult"></p>
+    
+    <h2>Decryption</h2>
+    <form id="decryptForm">
+        <input type="text" id="decryptInput" placeholder="Enter text to decrypt">
+        <button type="submit">Decrypt</button>
+    </form>
+    <p id="decryptResult"></p>
+    
+    <h2>Crypto Price</h2>
+    <form id="cryptoForm">
+        <input type="text" id="cryptoInput" placeholder="Enter cryptocurrency (e.g., bitcoin)">
+        <button type="submit">Get Price</button>
+    </form>
+    <p id="cryptoResult"></p>
+    
+    <script>
+        document.getElementById('encryptForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const data = document.getElementById('encryptInput').value;
+            const response = await fetch('/encrypt', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ data })
+            });
+            const result = await response.json();
+            document.getElementById('encryptResult').innerText = 'Encrypted: ' + result.encrypted;
+        };
+        
+        document.getElementById('decryptForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const data = document.getElementById('decryptInput').value;
+            const response = await fetch('/decrypt', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ data })
+            });
+            const result = await response.json();
+            document.getElementById('decryptResult').innerText = 'Decrypted: ' + result.decrypted;
+        };
+        
+        document.getElementById('cryptoForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const crypto = document.getElementById('cryptoInput').value;
+            const response = await fetch(`/crypto_price?crypto=${crypto}`);
+            const result = await response.json();
+            document.getElementById('cryptoResult').innerText = `${result.crypto} price: $${result.price}`;
+        };
+    </script>
+</body>
+</html>
